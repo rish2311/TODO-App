@@ -1,9 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = [
-  // Sample initial state
-  { id: 1, text: "Sample Task", completed: false },
-];
+const initialState = localStorage.getItem("tasks")
+  ? JSON.parse(localStorage.getItem("tasks"))
+  : [];
 
 const tasksSlice = createSlice({
   name: "tasks",
@@ -15,17 +14,24 @@ const tasksSlice = createSlice({
         text: action.payload,
         completed: false,
       };
-      state.push(newTask);
+      const updatedState = [...state, newTask];
+      localStorage.setItem("tasks", JSON.stringify(updatedState));
+      return updatedState;
     },
     deleteTask: (state, action) => {
-      return state.filter((task) => task.id !== action.payload);
+      const updatedState = state.filter((task) => task.id !== action.payload);
+      localStorage.setItem("tasks", JSON.stringify(updatedState));
+      return updatedState;
     },
     updateTask: (state, action) => {
       const taskIndex = state.findIndex(
         (task) => task.id === action.payload.id
       );
       if (taskIndex >= 0) {
-        state[taskIndex] = action.payload;
+        const updatedState = [...state];
+        updatedState[taskIndex] = action.payload;
+        localStorage.setItem("tasks", JSON.stringify(updatedState));
+        return updatedState;
       }
     },
   },
