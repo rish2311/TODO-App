@@ -22,6 +22,7 @@ const TaskInput = () => {
         label="New Task"
         value={task}
         onChange={(e) => setTask(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && handleAddTask()}
       />
       <Button
         variant="contained"
